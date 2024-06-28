@@ -31,7 +31,9 @@ Output is saved to the 'models' folder
 
 5. compile_results_mn5.m: Compiles inversion model results for all samples from each site for use in plotting scripts.
 
+6. compareInversions_synthetic.m and compareInversions_data.m: Creates figures equivalent to subplots in Fig. 3 and Fig. 9 in manuscript respectively. Shows results of inversion, true values for synthetic scenarios in red.
 
+8. SummarizeInversions.m: create figure 4 in manuscript - requires that all 16 scenarios have been inverted.
 
 makereport.m: Plots information about walkers, parameter distributions, model-data fit, and saves report as pdf in models/reports folder.
 
