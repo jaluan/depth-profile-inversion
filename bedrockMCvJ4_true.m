@@ -36,14 +36,6 @@ if fnr==21
     load('./data/Lamuvaara_v4_surf_n.mat','sample'), dpname = 'Lamuvaara_v4_surf_n'; % 'sample', 'model'
 elseif fnr==22
     load('./data/Naakakarhakka_v4_surf_n.mat','sample'), dpname = 'Naakakarhakka_v4_surf_n'; % 'sample', 'model'
-elseif fnr==23
-    load('./data/Gausta_v4_surf.mat','sample'), dpname = 'Gausta_v4_surf'; % 'sample', 'model'
-elseif fnr==24
-    load('./data/Lysefjord_v4_surf.mat','sample'), dpname = 'Lysefjord_v4_surf'; % 'sample', 'model'
-elseif fnr==25
-    load('./data/Karmøy_v4_surf.mat','sample'), dpname = 'Karmøy_v4_surf'; % 'sample', 'model'
-elseif fnr==26
-    load('./data/Andøya_v4_surf.mat','sample'), dpname = 'Andøya_v4_surf'; % 'sample', 'model'
 else
     load(['./data/synthetic_data_fw_dp_v4_scn',num2str(fnr),'_n'],'sample','model')
     dpname = ['Syn_v4_scn',num2str(fnr),'_true_n'];

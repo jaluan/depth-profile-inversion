@@ -68,7 +68,7 @@ switch scn
     E0    = 0.8;    %Erosion rate exponent, %10^(-2) = 0.01 m/Myr [log10(m/Myr)] (-2 to 2)
 
     case 7
-% Scn7/ synv4_7, Designet til at minde om Gaustatoppen inversion af data
+% Scn7/ synv4_7, 
     d18Op = 4.22;  % d18O threshold (3.5-5)
     Tdgla = 15e-3; % Time of last deglaciation [Myr] (2-15e-3)
     Z1    = 0.02;    % Depth at time of deglaciation [m] (0-0.05)
@@ -79,7 +79,7 @@ switch scn
     E0    = 0.8;    %Erosion rate exponent, %10^(-2) = 0.01 m/Myr [log10(m/Myr)] (-2 to 2)
 
     case 8
-% Scn8/ synv4_8, Designet til at minde om Gaustatoppen inversion af data
+% Scn8/ synv4_8, 
     d18Op = 3.814;  % d18O threshold (3.5-5)
     Tdgla = 15e-3; % Time of last deglaciation [Myr] (2-15e-3)
     Z1    = 0.02;    % Depth at time of deglaciation [m] (0-0.05)
