@@ -37,7 +37,7 @@ Output is saved to the 'models' folder
 
 makereport.m: Plots information about walkers, parameter distributions, model-data fit, and saves report as pdf in models/reports folder.
 
-Contents of subfolders:
+Fig1.m and Fig2.m creates figure 1 and figure 2 of the manuscript respectively.
 
 The data folder contains: 
 - Naakakarhakka.xlsx and Lamuvaara.xlsx and stores mat-files generated from compile_data and compile_synthetic_data functions.
