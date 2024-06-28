@@ -35,7 +35,7 @@ Output is saved to the 'models' folder
 
 8. SummarizeInversions.m: create figure 4 in manuscript - requires that all 16 scenarios have been inverted.
 
-makereport.m: Plots information about walkers, parameter distributions, model-data fit, and saves report as pdf in models/reports folder.
+9. makereport_syn_dp.m: Plots information about walkers, parameter distributions, model-data fit, and saves report as pdf in models/reports folder.
 
 Fig1.m and Fig2.m creates figure 1 and figure 2 of the manuscript respectively.
 
