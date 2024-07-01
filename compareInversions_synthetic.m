@@ -14,13 +14,15 @@ addpath('Functions')
 
 %% load data
 
-scn=1; %Change scenario here
+scn=14; %Change scenario here
 
 samplename=['Scenario ', num2str(scn)];
 load(['models/Syn_v4_scn',num2str(scn),'_truesurf_n.mat']); %surface sample only
 model1=model;
-load(['models/Syn_v4_scn',num2str(scn),'_true_n.mat']); %depth points incl. surface sample, true values
+load(['models/Syn_v4_scn',num2str(scn),'_true_n.mat']); %five depth points incl. surface sample, true values
 model2=model;
+% load('models/Syn_v4_scn1_1.mat'); %five depth points incl. surface sample, rand values
+% model3=model;
 clear model
 
 %% Exhumation plots
@@ -92,7 +94,7 @@ set(ax2,'xtick',[]); set(ax2,'ytick',[]);
 % set(ax3,'xtick',[]); set(ax3,'ytick',[]);
 set(ax4,'xtick',0:1:5,'fontsize',35); set(ax4,'ytick',0:1:5,'fontsize',30);
 
-xlabel('Time (Ma)','fontsize',30);
+hxl=xlabel('Time (Ma)','fontsize',30);
 ylabel('Depth below surface (m)','fontsize',30);
 % title(samplename,'FontSize',30)
 text(min(xlim)+(max(xlim)-min(xlim))/2,min(ylim),samplename,'FontSize',30,'Horiz','center','Vert','top')
@@ -125,14 +127,19 @@ axes(ax6), line([0 3],[bO bO],'Color',[.8,.3,.3],'LineWidth',4)
 % Plot ice history for surface sample
 [~,~,~,bval,~,~]=IceHist(model1,dO_i,bt);
 % axes(ax5), myhist(1,dx,3,5,Nkernel,uval,.8*[1 1 1],1);
-axes(ax6), myhist(1,dx,0,100,Nkernel/5,bval,.8*[1 1 1],3);
+% Correcting for non-linear relation between dO_i and bt
+a = 3.5; b = 5.0; %range
+rdO18 = (b-a).*rand(1e6,1) + a; %random d18O values within range
+bur=interp1(dO_i,bt,rdO18); %random burial values within range
+
+axes(ax6), myhist_bcorr(1,dx,0,100,Nkernel/5,bval,.8*[1 1 1],3,bur);
 % plot(1,max(bval),'o','Color',.6*[1 1 1],'MarkerSize',10,'LineWidth',2)
 % plot(1,min(bval),'o','Color',.6*[1 1 1],'MarkerSize',10,'LineWidth',2)
 
-% Plot ice history for depth profile with 5 data points
+% Plot ice history for depth profile
 [uval,~,~,bval,~,~]=IceHist(model2,dO_i,bt);
 % axes(ax5), myhist(2,dx,3,5,Nkernel,uval,[.3 .3 .6],1);
-axes(ax6), myhist(2,dx,0,100,Nkernel/5,bval,[.3 .3 .6],3);
+axes(ax6), myhist_bcorr(2,dx,0,100,Nkernel/5,bval,[.3 .3 .6],3,bur);
 % plot(2,max(bval),'o','Color',[.3 .3 .6],'MarkerSize',10,'LineWidth',2)
 % plot(2,min(bval),'o','Color',[.3 .3 .6],'MarkerSize',10,'LineWidth',2)
 
@@ -160,6 +167,9 @@ text(-.33,15,'Ice burial ($\%$)','Interpreter','latex','Rotation',90,'Fontsize',
 % patch([1.5 1.5 1.6 1.6],[4.6 4.8 4.8 4.6],[.67 .44 .44]) %red patch
 % line([1.49 1.61],[4.7 4.7],'Color',[.4,.1,.1],'LineWidth',2) %red line
 % plot(1.55,4.7,'o','MarkerFaceColor',[.8,.4,.3],'MarkerEdgeColor','k','MarkerSize',8) %red marker
+
+axes(ax4)
+hxl.Position(2)=hxl.Position(2)-0.4; %adjust xlabel position
 
 set(gcf,'units','normalized','position',[.1,.3,.8,.8]);
 % mname = ['models/SyntheticInversion'];

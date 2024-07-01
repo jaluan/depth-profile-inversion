@@ -15,15 +15,15 @@ cols={[.7 .3 .3] [.2 .2 .5] [.8 .6 .5] [.5 .5 .7] [.4 .4 .2] [.5 .7 .6]...
     [.2 .7 .5] [.8 .2 .5]};
 sd=2; %show density for depth inversion, 1=no (uniform color), 2=yes
 
-%% load data (uncomment one block)
+%% load data
 
-samplename='Lamuvaara';
-ns=1;
-load('models/Lamuvaara_v4_surf_n.mat'); %surface sample only
-model1=model;
-load('models/Lamuvaara_v4_full_n.mat'); %full profile
-model2=model;
-siteNo=5;
+% samplename='Lamuvaara';
+% ns=1;
+% load('models/Lamuvaara_v4_surf_n.mat'); %surface sample only
+% model1=model;
+% load('models/Lamuvaara_v4_full_n.mat'); %full profile
+% model2=model;
+% siteNo=5;
 
 % samplename='Naakakarhakka';
 % ns=1;
@@ -33,13 +33,13 @@ siteNo=5;
 % model2=model;
 % siteNo=6;
 
-% samplename='Joint inversion';
-% ns=2;
-% load('models/Lamuvaara_v4_surf_n.mat'); %surface sample only
-% model1=model;
-% load('models/Naa_Lam_v4_full_n.mat'); %full profile
-% model2=model;
-% siteNo=[5,6];
+samplename='Joint inversion';
+ns=2;
+load('models/Lamuvaara_v4_surf_n.mat'); %surface sample only
+model1=model;
+load('models/Naa_Lam_v4_full_n.mat'); %full profile
+model2=model;
+siteNo=[5,6];
 
 clear model
 
@@ -137,9 +137,9 @@ end
 % set(ax3,'xtick',[]); set(ax3,'ytick',[]);
 % set(ax4,'xtick',0:1:5,'fontsize',35); set(ax4,'ytick',0:1:5,'fontsize',35);
 
-xlabel('Time (Ma)','fontsize',38);
+hxl=xlabel('Time (Ma)','fontsize',38);
 ylabel('Depth below surface (m)','fontsize',40);
-title(samplename,'fontsize',30)
+% title(samplename,'fontsize',30)
 
 %% Draw ice histories as violin plots in inset
 dx=0.3; Nkernel = 500;
@@ -170,22 +170,27 @@ load('burialTime_500ka.mat') %conversion of d18O to burial time in % within last
 % axes(ax5), myhist(1,dx,3,5,Nkernel,uval,.8*[1 1 1],1);
 % if ~isempty(uval2), myhist(1,dx*length(uval2)/length(uval),3,5,Nkernel,uval2,col1b,1); end
 % if ~isempty(uval3), myhist(1,dx*length(uval3)/length(uval),3,5,Nkernel,uval3,col1c,1); end
-if ns==1, axes(ax6), myhist(1,dx,0,100,Nkernel/5,bval,.8*[1 1 1],5); end
+% Correcting for non-linear relation between dO_i and bt
+a = 3.5; b = 5.0; %range
+rdO18 = (b-a).*rand(1e6,1) + a; %random d18O values within range
+bur=interp1(dO_i,bt,rdO18); %random burial values within range
+
+if ns==1, axes(ax6), myhist_bcorr(1,dx,0,100,Nkernel/5,bval,.8*[1 1 1],5,bur); end
 % plot(1,max(bval),'o','Color',.6*[1 1 1],'MarkerSize',10,'LineWidth',2) %circle at max value
 % plot(1,min(bval),'o','Color',.6*[1 1 1],'MarkerSize',10,'LineWidth',2)
 % if ~isempty(bval2), myhist(1,dx*length(bval2)/length(bval),0,100,Nkernel/5,bval2,col1b,5); end
 % if ~isempty(bval3), myhist(1,dx*length(bval3)/length(bval),0,100,Nkernel/5,bval3,col1c,5); end
 
-% Plot ice history for depth profile with 5 data points
+% Plot ice history for depth profile
 [uval,~,~,bval,~,~]=IceHist(model2,dO_i,bt);
 % axes(ax5), myhist(2,dx,3,5,Nkernel,uval,[.3 .3 .6],1);
 % if ~isempty(uval2), myhist(2,dx*length(uval2)/length(uval),3,5,Nkernel,uval2,col2b,1); end
 % if ~isempty(uval3), myhist(2,dx*length(uval3)/length(uval),3,5,Nkernel,uval3,col2c,1); end
 if ns==1
-    axes(ax6), myhist(2,dx,0,100,Nkernel/5,bval,cols{siteNo(1)},5); %[.3 .3 .6]
+    axes(ax6), myhist_bcorr(2,dx,0,100,Nkernel/5,bval,cols{siteNo(1)},5,bur); %[.3 .3 .6]
 elseif ns==2
     col=mean([cols{siteNo(1)};cols{siteNo(2)}]);
-    axes(ax6), myhist(1.5,dx,0,100,Nkernel/5,bval,col,5); %[.3 .3 .6]
+    axes(ax6), myhist_bcorr(1.5,dx,0,100,Nkernel/5,bval,col,5,bur); %[.3 .3 .6]
 end
 
 % plot(2,max(bval),'o','Color',[.3 .3 .6],'MarkerSize',10,'LineWidth',2) %circle at max value
@@ -221,6 +226,9 @@ text(-.33,15,'Ice burial ($\%$)','Interpreter','latex','Rotation',90,'Fontsize',
 % patch([1.5 1.5 1.6 1.6],[4.6 4.8 4.8 4.6],[.67 .44 .44]) %red patch
 % line([1.49 1.61],[4.7 4.7],'Color',[.4,.1,.1],'LineWidth',2) %red line
 % plot(1.55,4.7,'o','MarkerFaceColor',[.8,.4,.3],'MarkerEdgeColor','k','MarkerSize',8) %red marker
+% axes(ax2) %
+axes(ax3)
+hxl.Position(2)=hxl.Position(2)-0.4; %adjust xlabel position
 
 set(gcf,'units','normalized','position',[.1,.3,.8,.8]);
 % mname = ['models/SyntheticInversion'];
