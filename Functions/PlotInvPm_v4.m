@@ -1,7 +1,6 @@
 function PlotInvPm_v4(fnr,tile,nScn)
 
 %% Plot inversion of surface sample
-% mname = ['models/Synv2_',num2str(fnr),'b.mat']; load(mname);
 load(['models/Syn_v4_scn',num2str(fnr),'_truesurf_n.mat']); %surface sample only
 
 nexttile(tile) %Ice burial
@@ -11,7 +10,12 @@ bvalt=interp1(dO_i,bt,model.synpmval(1)); %true burial value (% since 1 Ma)
 line([0 1],[bvalt bvalt],'Color',[.8,.3,.3],'LineWidth',2)% true burial value
 hold on
 [~,~,~,bval,~,~]=IceHist(model,dO_i,bt);
-myhist_(0,dx,0,100,Nkernel,bval,'k',5,.2,':',2);%histogram of modelled results
+
+% Correcting for non-linear relation between dO_i and bt
+a = 3.5; b = 5.0; %range
+rdO18 = (b-a).*rand(1e6,1) + a; %random d18O values within range
+bur=interp1(dO_i,bt,rdO18); %random burial values within range
+myhist_bur(0,dx,0,100,Nkernel,bval,'k',5,.2,':',2,bur);%histogram of modelled results (corrected)
 set(gca,'FontSize',16); box on
 xlim([0 1]), ylim([0 100])
 title(['Scenario ', num2str(fnr)])
@@ -35,12 +39,11 @@ myhist_(0,dx,0,Emax,Nkernel,E1,'k',5,.2,':',2);%histogram of modelled results
 xlim([0 1]), ylim([0 Emax])
 set(gca,'FontSize',16); box on
 
-%% True concentration inversions
-% mname = ['models/Synv2_',num2str(fnr),'_true.mat']; load(mname);
-load(['models/Syn_v4_scn',num2str(fnr),'_true_n.mat']); %five depth points incl. surface sample, true values
+%% True concentration inversions depth profiles
+load(['models/Syn_v4_scn',num2str(fnr),'_true_n.mat']); % depth profile inversion, true values
 nexttile(tile) %Ice burial
 [~,~,~,bval,~,~]=IceHist(model,dO_i,bt);
-myhist_(0,dx,0,100,Nkernel,bval,[.3,.3,.6],5,0,':',3);%histogram of modelled results
+myhist_bur(0,dx,0,100,Nkernel,bval,[.3,.3,.6],5,0,':',3,bur);%histogram of modelled results
 
 nexttile(tile+nScn) %Time of 1 m erosion
 [E1,TZ1] = interpModel(model,TE1,ZT1); %model values
