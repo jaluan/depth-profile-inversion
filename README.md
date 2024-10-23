@@ -1,7 +1,8 @@
 # depth-profile-inversion
 MCMC inversion code for cosmogenic nuclide bedrock depth profiles
 
-This MCMC inversion code generates the model output presented and discussed in the manuscript: Ice-sheet burial and erosion inferred from cosmogenic nuclide bedrock depth profiles: implications for the glaciation history of northeastern Fennoscandia, Andersen et al. submitted to Quaternary Science Reviews in July 2024.
+This MCMC inversion code generates the model output presented and discussed in the manuscript: Ice-sheet burial and erosion inferred from cosmogenic nuclide bedrock depth profiles: implications for the glaciation history of northeastern Fennoscandia, Andersen et al. Quaternary Science Reviews 344 (2024) 
+https://doi.org/10.1016/j.quascirev.2024.109010.
 
 Note 1: At present the code is set up to handle 10Be and 26Al (both are mandatory).
 
